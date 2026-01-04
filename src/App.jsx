@@ -5,7 +5,6 @@ import ProductList from "./components/ProductList.jsx"
 import Cart from "./components/Cart.jsx"
 
 function App() {
-  // state management
   const [products, setProducts] = useState([])
   const [filteredProducts, setFilteredProducts] = useState([])
   const [categories, setCategories] = useState([])
@@ -16,27 +15,23 @@ function App() {
   const [cart, setCart] = useState([])
   const [showCart, setShowCart] = useState(false)
 
-  // fetch products on mount
   useEffect(() => {
-    fetch("https://dummyjson.com/products?limit=20")
+    fetch("https://dummyjson.com/products?limit=20") //api
       .then((res) => res.json())
       .then((data) => {
         console.log("fetched products", data.products.length)
-        // limit to 18 products and ensure stock values exist
-        const productList = data.products.slice(0, 18)
+        const productList = data.products.slice(0, 18)//limit 18
         const productsWithStock = productList.map((p) => {
           if (p.stock && typeof p.stock === "number") {
             return p
           } else {
-            // generate mock stock if missing
-            const mockStock = Math.floor(Math.random() * 15) + 5
+            const mockStock = Math.floor(Math.random() * 15) + 5 //mock stock
             console.log("missing stock for", p.title, "setting to", mockStock)
             return { ...p, stock: mockStock }
           }
         })
         setProducts(productsWithStock)
         setFilteredProducts(productsWithStock)
-        // extract unique categories
         const cats = []
         productsWithStock.forEach((p) => {
           if (!cats.includes(p.category)) {
