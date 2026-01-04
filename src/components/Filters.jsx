@@ -12,6 +12,7 @@ function Filters({
     <div className="filters">
       <h2>Filters</h2>
 
+      {/* search input */}
       <div className="filter-group">
         <label htmlFor="search">Search</label>
         <input
@@ -23,6 +24,7 @@ function Filters({
         />
       </div>
 
+      {/* category dropdown */}
       <div className="filter-group">
         <label htmlFor="category">Category</label>
         <select
@@ -39,6 +41,7 @@ function Filters({
         </select>
       </div>
 
+      {/* sort dropdown */}
       <div className="filter-group">
         <label htmlFor="sort">Sort By</label>
         <select
@@ -52,6 +55,7 @@ function Filters({
         </select>
       </div>
 
+      {/* clear all filters */}
       <button className="clear-filters-button" onClick={onClear}>
         Clear Filters
       </button>

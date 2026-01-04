@@ -5,6 +5,7 @@ import ProductList from "./components/ProductList.jsx"
 import Cart from "./components/Cart.jsx"
 
 function App() {
+  // state management
   const [products, setProducts] = useState([])
   const [filteredProducts, setFilteredProducts] = useState([])
   const [categories, setCategories] = useState([])
@@ -15,16 +16,19 @@ function App() {
   const [cart, setCart] = useState([])
   const [showCart, setShowCart] = useState(false)
 
+  // fetch products on mount
   useEffect(() => {
     fetch("https://dummyjson.com/products?limit=20")
       .then((res) => res.json())
       .then((data) => {
         console.log("fetched products", data.products.length)
+        // limit to 18 products and ensure stock values exist
         const productList = data.products.slice(0, 18)
         const productsWithStock = productList.map((p) => {
           if (p.stock && typeof p.stock === "number") {
             return p
           } else {
+            // generate mock stock if missing
             const mockStock = Math.floor(Math.random() * 15) + 5
             console.log("missing stock for", p.title, "setting to", mockStock)
             return { ...p, stock: mockStock }
@@ -32,6 +36,7 @@ function App() {
         })
         setProducts(productsWithStock)
         setFilteredProducts(productsWithStock)
+        // extract unique categories
         const cats = []
         productsWithStock.forEach((p) => {
           if (!cats.includes(p.category)) {
@@ -50,10 +55,11 @@ function App() {
         setLoading(false)
       })
   }, [])
-
+//filter and sort
   useEffect(() => {
     let result = products
 
+    // search
     if (searchTerm) {
       result = result.filter((p) => {
         return p.title.toLowerCase().includes(searchTerm.toLowerCase())
@@ -61,10 +67,12 @@ function App() {
       console.log("search filter applied", result.length, "results")
     }
 
+    // category
     if (selectedCategory) {
       result = result.filter((p) => p.category === selectedCategory)
     }
 
+    // price sort
     if (sortOrder === "low-to-high") {
       result = result.slice().sort((a, b) => {
         return a.price - b.price
@@ -89,6 +97,7 @@ function App() {
     setCart((prevCart) => {
       const found = prevCart.find((item) => item.product.id === product.id)
       if (found) {
+        // quantity add
         const newQty = found.quantity + 1
         if (newQty > product.stock) {
           console.log("max stock reached for", product.title, "current:", found.quantity, "stock:", product.stock)
@@ -102,21 +111,24 @@ function App() {
           return item
         })
       } else {
+        // add
         console.log("added new item to cart", product.title)
         return [...prevCart, { product: product, quantity: 1 }]
       }
     })
   }
-
+//update
   function updateQuantity(productId, change) {
     setCart((prevCart) => {
       const updated = prevCart.map((item) => {
         if (item.product.id === productId) {
           const newQty = item.quantity + change
+          //  quantiti limit
           if (newQty < 1) {
             console.log("removing item, quantity would be", newQty)
             return null
           }
+          //stock limit
           if (newQty > item.product.stock) {
             console.log("cant increase, stock limit", item.product.title, "qty:", item.quantity, "stock:", item.product.stock)
             return item
@@ -129,18 +141,21 @@ function App() {
     })
   }
 
+  // remove
   function removeFromCart(productId) {
     setCart((prevCart) => {
       return prevCart.filter((item) => item.product.id !== productId)
     })
   }
 
+  // clear all
   function clearFilters() {
     setSearchTerm("")
     setSelectedCategory("")
     setSortOrder("")
   }
 
+  // total items of cart
   let totalItems = 0
   cart.forEach((item) => {
     totalItems += item.quantity
