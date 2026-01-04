@@ -1,5 +1,4 @@
 function Cart({ cart, totalItems, totalPrice, onUpdateQuantity, onRemove, onClose }) {
-  // close cart when clicking overlay
   const handleOverlayClick = (e) => {
     if (e.target === e.currentTarget) {
       console.log("closing cart")
@@ -9,7 +8,6 @@ function Cart({ cart, totalItems, totalPrice, onUpdateQuantity, onRemove, onClos
 
   return (
     <div className="cart-overlay" onClick={handleOverlayClick}>
-      {/* prevent panel clicks from closing cart */}
       <div className="cart-panel" onClick={(e) => e.stopPropagation()}>
         <div className="cart-header">
           <h2>Your Cart</h2>
@@ -24,9 +22,8 @@ function Cart({ cart, totalItems, totalPrice, onUpdateQuantity, onRemove, onClos
           <>
             <div className="cart-items">
               {cart.map((item) => {
-                // warn if quantity exceeds stock
                 if (item.quantity > item.product.stock) {
-                  console.log("warning: quantity exceeds stock", item.product.title, item.quantity, item.product.stock)
+                  console.log("warning: quantity exceeds stock", item.product.title, item.quantity, item.product.stock) // warning 
                 }
                 return (
                   <div key={item.product.id} className="cart-item">
@@ -38,7 +35,7 @@ function Cart({ cart, totalItems, totalPrice, onUpdateQuantity, onRemove, onClos
                     <div className="cart-item-details">
                       <div className="cart-item-name">{item.product.title}</div>
                       {/* convert usd to inr */}
-                      <div className="cart-item-price">₹{(item.product.price * 83).toFixed(2)}</div>
+                      <div className="cart-item-price">₹{(item.product.price * 90).toFixed(2)}</div>
                       <div className="quantity-controls">
                         <button
                           className="quantity-button"
@@ -74,8 +71,7 @@ function Cart({ cart, totalItems, totalPrice, onUpdateQuantity, onRemove, onClos
             </div>
             <div className="cart-summary">
               <div className="cart-items-count">Total Items: {totalItems}</div>
-              {/* convert usd to inr */}
-              <div className="cart-total">Total: ₹{(totalPrice * 83).toFixed(2)}</div>
+              <div className="cart-total">Total: ₹{(totalPrice * 90).toFixed(2)}</div>
             </div>
           </>
         )}
