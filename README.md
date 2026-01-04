@@ -11,7 +11,6 @@ A modern, user-friendly e-commerce app built with React. Browse products, filter
 - 📦 Category filtering
 - 💰 Price sorting
 - 🛒 Shopping cart management
-- 💵 Prices in Indian Rupees (₹)
 
 ## Quick Start
 
